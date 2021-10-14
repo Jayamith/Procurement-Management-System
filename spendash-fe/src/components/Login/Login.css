@@ -1,0 +1,40 @@
+.login-title {
+  font-family: 'Bebas Neue', cursive;
+  /* font-weight: 600; */
+  color: #808080;
+  font-size: 40px;
+  text-align: center;
+  /* padding: 28px 0px; */
+}
+
+.login-container {
+  /* margin: 0px 100px; */
+  margin-top: 40px;
+  margin-bottom: 70px;
+  padding: 0px 25% !important;
+}
+
+.login-form-group {
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+.login-form-input {
+  border-width: 2px !important;
+  color: black !important;
+  font-weight: 480 !important;
+}
+
+.login-button {
+  font-weight: 600;
+  background-color: black !important;
+  margin-top: 15px;
+}
+
+.login-error {
+  color: red;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 0px !important;
+}
