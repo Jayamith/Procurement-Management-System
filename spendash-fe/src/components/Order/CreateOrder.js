@@ -32,10 +32,10 @@ class CreateOrder extends Component {
     //controlled inputs, should not be null as well..[ERR-LOG 01]
     this.state = {
       order: {
-        // id: this.props.match.params.id,
+        id: this.props.match.params.id,
         selectedSite: '',
         expectedDate: '',
-        type: '',
+        type: 'Order',
         selectedSupplier: '',
         deliveryAddress: '',
         items: [],
@@ -68,6 +68,7 @@ class CreateOrder extends Component {
     this.deleteSelected = this.deleteSelected.bind(this);
     this.getSuppliers = this.getSuppliers.bind(this);
     this.getSites = this.getSites.bind(this);
+    this.getDetailedOrder = this.getDetailedOrder.bind(this);
   }
 
   componentDidMount() {
@@ -75,6 +76,7 @@ class CreateOrder extends Component {
     this.refreshItems();
     this.getSuppliers();
     this.getSites();
+    this.getDetailedOrder();
   }
 
   refreshItems() {
@@ -101,11 +103,11 @@ class CreateOrder extends Component {
   }*/
 
   getSites() {
-    AddOrderDataService.getAllSites().then((response) => {
-      this.setState({ sites: response.data }, () => {
-        console.log('Sites', this.state.sites);
+      AddOrderDataService.getAllSites().then((response) => {
+        this.setState({sites: response.data}, () => {
+          console.log('Sites', this.state.sites);
+        });
       });
-    });
   }
 
   getSuppliers() {
@@ -260,6 +262,30 @@ class CreateOrder extends Component {
         });
   }
 
+  getDetailedOrder() {
+    const { order } = this.state;
+      console.log(order.id)
+    if (order.id != null) {
+      OrderDataService.getOrderById(order.id).then((res) => {
+        console.log(res.data.site.name, 'res');
+        order['id'] = res.data.id;
+        order['comment'] = res.data.comment;
+        order['cost'] = res.data.cost;
+        order['expectedDate'] = res.data.expectedDate;
+        order['items'] = res.data.items;
+        order['status'] = res.data.status;
+        order['selectedSite'] = res.data.site.name;
+        order['deliveryAddress'] = res.data.site.address;
+        order['supplier'] = res.data.supplier.name;
+        order['lastModifiedBy'] = res.data.lastModifiedBy.name;
+
+        this.setState({
+          order
+        });
+      });
+    }
+  }
+
   updateOrder(event) {
     event.preventDefault();
     const { order } = this.state;
@@ -268,12 +294,17 @@ class CreateOrder extends Component {
     //Object was used, Code 400 err, [ERR-LOG-02]
     // It uses the same format a form would use if the encoding type were set to "multipart/form-data".
     let formData = new FormData();
-    formData.append('selectedSite', order.selectedSite);
+    formData.append('id', order.id);
+    formData.append('site', order.selectedSite);
     formData.append('expectedDate', order.expectedDate);
     formData.append('type', order.type);
-    formData.append('selectedSupplier', order.selectedSupplier);
+    formData.append('comment', order.comment);
+    formData.append('supplier', order.selectedSupplier);
     formData.append('deliveryAddress', order.deliveryAddress);
-    formData.append('lastModifiedBy', order.lastModifiedBy);
+    formData.append('lastModifiedBy',order.lastlyModifiedBy);
+    formData.append('status', 'pending');
+    formData.append('cost',localStorage.getItem('cost'));
+    formData.append('items',JSON.stringify(this.state.selectedItems));
 
     AddOrderDataService.updateOrder(order.id, formData)
       .then((res) => {
@@ -284,7 +315,7 @@ class CreateOrder extends Component {
             icon: 'success',
             button: 'Ok'
           }).then((result) => {
-            return this.props.history.push(`/step2`);
+            return this.props.history.push(`/siteOrders`);
           });
         }, 1000);
       })
@@ -343,12 +374,12 @@ class CreateOrder extends Component {
     const {
       selectedSite,
       expectedDate,
+      id,
       type,
       selectedSupplier,
       deliveryAddress,
       comment
     } = order;
-    console.log(selectedSupplier, 'ii');
 
     let newItems =
       items &&
@@ -377,16 +408,34 @@ class CreateOrder extends Component {
           }}
         >
           <Form autoComplete="off" onSubmit={createOrder}>
-            <div
+            {
+              id === null && (
+              <div
               style={{
-                fontWeight: 600,
-                fontSize: '25px',
-                marginBottom: '20px',
-                textAlign: 'center'
-              }}
-            >
+              fontWeight: 600,
+              fontSize: '25px',
+              marginBottom: '20px',
+              textAlign: 'center'
+            }}
+              >
               ADD NEW ORDER
-            </div>
+              </div>
+              )
+            }
+            {
+              id !== null && (
+                  <div
+                      style={{
+                        fontWeight: 600,
+                        fontSize: '25px',
+                        marginBottom: '20px',
+                        textAlign: 'center'
+                      }}
+                  >
+                    UPDATE ORDER
+                  </div>
+              )
+            }
             <Row
               style={{ marginTop: '20px' }}
               className="justify-content-md-center"
@@ -401,11 +450,13 @@ class CreateOrder extends Component {
                   as="select"
                   className="paperregistration-form-input"
                 >
-                  <option value="">- Select -</option>
+
+                  <option value={selectedSite}>- Select -</option>
                   {this.state.sites &&
                     this.state.sites.map((site) => (
                       <option key={site.id} value={site.id}>{site.name}</option>
                     ))}
+
                   {/*{this.state.sites && this.state.sites.map(site => (
                       <option value={site.value} key={site.value}>
                         {site.display}
@@ -493,8 +544,8 @@ class CreateOrder extends Component {
                 />
               </Col>
             </Row>
-            <Row style={{ marginTop: 10 }}>
-              <Col>
+            <Row  style={{ marginTop: 10 }}>
+              <Col md="auto">
                 <div style={{marginTop: 30}}>
                   <Card>
                     <Card.Header >
@@ -566,15 +617,24 @@ class CreateOrder extends Component {
               </Col>
 
             </Row>
-
+            { order.id &&
+              <Button
+                  variant="warning"
+                  style={{ marginBottom: 8 }}
+                  onClick={this.createOrder}
+              >
+                Update
+              </Button>
+            }
+            { !order.id &&
             <Button
-              variant="secondary"
-              style={{ marginBottom: 8 }}
-              onClick={this.createOrder}
+                variant="info"
+                style={{ marginBottom: 8 }}
+                onClick={this.createOrder}
             >
-              Submit
+              Create
             </Button>
-
+            }
             {buttonError && (
               <p className="paperregistration-error">{buttonError}</p>
             )}
