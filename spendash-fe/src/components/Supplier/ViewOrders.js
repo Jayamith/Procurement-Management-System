@@ -40,7 +40,7 @@ class ReceivedOrderList extends Component {
 
     getOrderBySupplier = async () => {
         const {id} = this.state
-        let response = await AddReceiptDataService.getOrdersBySupplier('approvedBySeniorStaff',id)
+        let response = await AddReceiptDataService.getOrdersBySupplier('approved',id)
         this.setState({orders: response.data});
 
         let response2 = await AddReceiptDataService.getOrdersBySupplier('approvedBySupplier',id)
@@ -61,7 +61,7 @@ class ReceivedOrderList extends Component {
         const customBadge = (text) => {
             let color = text === 'pending' ? '#FDD017' : ((text === 'approvedBySupplier') ? '#3DF970':
                 ((text === 'seniorApprovalRequired') ? '#3DED97' : ((text === 'checkedByProcStaff') ? '#03C04A':
-                    ((text === 'approvedBySeniorStaff') ? '#B0FC38' :('#F9423D') ))));
+                    ((text === 'approved') ? '#B0FC38' :('#F9423D') ))));
             return (
                 <span style={{ backgroundColor: color, borderRadius: 4 }}>{text}</span>
             );

@@ -15,6 +15,7 @@ import OrderDataService from './OrderDataService';
 import Authentication from '../../authentication/Authentication';
 import SiteDataService from '../Header-Footer/SiteDataService';
 import SiteSelector from '../Header-Footer/SiteSelector';
+import {searchFilter} from "../../utils/searchFilter";
 
 class OrderList extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class OrderList extends Component {
       selectedSite: '',
       sites: [],
       acceptedOrders: [],
+      filterName:''
     };
     this.refreshOrders = this.refreshOrders.bind(this);
   }
@@ -79,6 +81,11 @@ class OrderList extends Component {
     return this.props.history.push(`/orderDetailedView/${id}`);
   };
 
+  handleSearch = ({target:input}) => {
+    this.setState({[input.name] : input.value})
+  }
+
+
   render() {
     const { orders, selectedSite , acceptedOrders} = this.state;
     const searchBox = {
@@ -89,6 +96,12 @@ class OrderList extends Component {
       borderTop: 'none',
       borderColor: '#000'
     };
+
+    const filtereredData = searchFilter(
+        orders,
+        this.state.filterName,
+        'status'
+    )
 
     const customBadge = (text) => {
       let color = text === 'pending' ? '#FDD017' : ((text === 'approvedBySupplier') ? '#3DF970':
@@ -124,9 +137,10 @@ class OrderList extends Component {
           <FormControl
             style={searchBox}
             autoComplete="off"
+            onChange={this.handleSearch}
             placeholder="Search for Orders..."
-            name="search"
-            value={this.state.search}
+            name="filterName"
+            value={this.state.filterName}
             className=""
           />
           &nbsp;
@@ -144,8 +158,8 @@ class OrderList extends Component {
             </tr>
           </thead>
           <tbody>
-            {orders &&
-              orders
+            {filtereredData &&
+             filtereredData
                 .filter(
                   (item) =>
                     selectedSite === item.site.name || selectedSite === ''

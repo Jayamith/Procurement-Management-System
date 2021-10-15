@@ -73,7 +73,6 @@ public class OrderController {
     @PutMapping("/order")
     public ResponseEntity<?> updateOrder(@RequestParam("id") String id,
                                          @RequestParam("items") String items,
-                                         @RequestParam("date") String date,
                                          @RequestParam("expectedDate") String expectedDate,
                                          @RequestParam("status") String status,
                                          @RequestParam("cost") double cost,
@@ -85,7 +84,7 @@ public class OrderController {
         Item[] itemsList = mapper.readValue(items, Item[].class);
         Orders orders = new Orders();
         orders.setId(Long.parseLong(id));
-        orders.setDate(LocalDate.parse(date));
+        orders.setDate(LocalDate.now());
         orders.setExpectedDate(LocalDate.parse(expectedDate));
         orders.setStatus(status);
         orders.setCost(cost);

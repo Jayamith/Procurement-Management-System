@@ -25,11 +25,13 @@ class Header extends Component {
             <Nav className="me-auto">
               {Authentication.loggedAsSupplier() && <NavLink className="nav-link header-item" to="/supplierOrders">Orders</NavLink>}
               {Authentication.loggedAsSiteManager()  && <NavLink className="nav-link header-item" to="/orderList">Orders</NavLink>}
+              {Authentication.loggedAsSiteManager()  && <NavLink className="nav-link header-item" to="/payments">Payments</NavLink>}
               {Authentication.loggedAsProcurement()  && <NavLink className="nav-link header-item" to="/orderList">Orders</NavLink>}
               {Authentication.loggedAsSupplier() && <NavLink className="nav-link header-item" to="/supplierAllItems">Items</NavLink>}
               {Authentication.loggedAsSiteManager()  && <NavLink className="nav-link header-item" to="/allSuppliers">Suppliers</NavLink>}
               {Authentication.loggedAsProcurement()  && <NavLink className="nav-link header-item" to="/allSuppliers">Suppliers</NavLink>}
               {Authentication.isUserLoggedIn() && <NavLink className="nav-link header-item" onClick={() => Authentication.logout()} to="/">Logout</NavLink>}
+
             </Nav>
           </Navbar.Collapse>
         </Container>

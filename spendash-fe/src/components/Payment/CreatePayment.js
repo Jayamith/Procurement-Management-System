@@ -49,13 +49,12 @@ export class CreatePayment extends Component {
         const { payment } = this.state;
 
         this.setState({ loading: true });
-        //Object was used, Code 400 err, [ERR-LOG-02]
-        // It uses the same format a form would use if the encoding type were set to "multipart/form-data".
+
         let formData = new FormData();
         formData.append('invoice', payment.invoice);
         formData.append('amount', payment.amount);
         formData.append('paidBy', payment.paidBy);
-        formData.append('method', payment.method);
+        formData.append('method', 'test');
         formData.append('site', payment.selectedSite);
 
         PaymentDataService.createPayment(formData)
@@ -66,9 +65,9 @@ export class CreatePayment extends Component {
                         title: 'Payment Created successfully !!!',
                         icon: 'success',
                         button: 'Ok'
-                    })/*.then((result) => {
-                        return this.props.history.push(`/siteManager`);
-                    });*/
+                    }).then((result) => {
+                        return this.props.history.push(`/payments`);
+                    });
                 }, 1000);
             })
             .catch((err) => {
