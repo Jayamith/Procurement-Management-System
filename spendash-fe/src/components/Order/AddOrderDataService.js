@@ -9,8 +9,8 @@ class AddOrderDataService {
     getOrderForId(Id) {
         return axios.get(`http://localhost:8080/api/v1/order/${Id}`);
     }
-    updateOrder(id, data) {
-        return axios.put(`http://localhost:8080/api/v1/order/${id}`, data);
+    updateOrder(data) {
+        return axios.put(`http://localhost:8080/api/v1/order`, data);
     }
     getAllSites(){
         return axios.get(`http://localhost:8080/api/v1/site/`);

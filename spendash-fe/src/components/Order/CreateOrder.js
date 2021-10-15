@@ -25,6 +25,7 @@ import ItemCard from '../Items/ItemCard';
 import SelectedItems from '../Items/SelectedItems';
 import Authentication from "../../authentication/Authentication";
 import TextArea from "../../asset/commons/TextArea";
+import {searchFilter} from "../../utils/searchFilter";
 
 class CreateOrder extends Component {
   constructor(props) {
@@ -274,14 +275,15 @@ class CreateOrder extends Component {
         order['expectedDate'] = res.data.expectedDate;
         order['items'] = res.data.items;
         order['status'] = res.data.status;
-        order['selectedSite'] = res.data.site.name;
+        order['selectedSite'] = res.data.site.id;
         order['deliveryAddress'] = res.data.site.address;
-        order['supplier'] = res.data.supplier.name;
+        order['selectedSupplier'] = res.data.supplier.userName;
         order['lastModifiedBy'] = res.data.lastModifiedBy.name;
 
         this.setState({
           order
         });
+
       });
     }
   }
@@ -305,8 +307,9 @@ class CreateOrder extends Component {
     formData.append('status', 'pending');
     formData.append('cost',localStorage.getItem('cost'));
     formData.append('items',JSON.stringify(this.state.selectedItems));
+    formData.append('date','12-12-2021');
 
-    AddOrderDataService.updateOrder(order.id, formData)
+    AddOrderDataService.updateOrder(formData)
       .then((res) => {
         setTimeout(() => {
           this.setState({ loading: false });
@@ -369,6 +372,13 @@ class CreateOrder extends Component {
     });
   };
 
+  handleChange2 = ({ target: input }) => {
+    this.setState({
+      [input.name]: input.value
+    });
+  };
+
+
   render() {
     const { errors, order, items, buttonError } = this.state; //properties
     const {
@@ -381,9 +391,15 @@ class CreateOrder extends Component {
       comment
     } = order;
 
+    const filtereredData = searchFilter(
+        items,
+        this.state.filterName,
+        'name'
+    )
+
     let newItems =
-      items &&
-      items.filter((item) => {
+        filtereredData &&
+        filtereredData.filter((item) => {
         return this.state.order.selectedSupplier === item.supplier.userName;
       });
 
@@ -397,6 +413,7 @@ class CreateOrder extends Component {
       margin: '10px'
     };
 
+
     const { createOrder } = this; //methods
     return (
       <div>
@@ -409,7 +426,7 @@ class CreateOrder extends Component {
         >
           <Form autoComplete="off" onSubmit={createOrder}>
             {
-              id === null && (
+             !id  && (
               <div
               style={{
               fontWeight: 600,
@@ -423,7 +440,7 @@ class CreateOrder extends Component {
               )
             }
             {
-              id !== null && (
+              id  && (
                   <div
                       style={{
                         fontWeight: 600,
@@ -450,8 +467,7 @@ class CreateOrder extends Component {
                   as="select"
                   className="paperregistration-form-input"
                 >
-
-                  <option value={selectedSite}>- Select -</option>
+                  <option >- Select -</option>
                   {this.state.sites &&
                     this.state.sites.map((site) => (
                       <option key={site.id} value={site.id}>{site.name}</option>
@@ -484,7 +500,7 @@ class CreateOrder extends Component {
                   <option value="">- Select -</option>
                   {this.state.suppliers &&
                     this.state.suppliers.map((supplier) => (
-                      <option key={supplier.id}>{supplier.userName}</option>
+                      <option key={supplier.id} value={supplier.userName}>{supplier.userName}</option>
                     ))}
                 </Form.Control>
                 <Form.Text className="text-muted">
@@ -566,9 +582,10 @@ class CreateOrder extends Component {
                         <FormControl
                             style={searchBox}
                             autoComplete="off"
-                            placeholder="start typing..."
-                            name="search"
-                            value={this.state.search}
+                            onChange={this.handleChange2}
+                            placeholder="Search for Items..."
+                            name="filterName"
+                            value={this.state.filterName}
                             className=""
                         />
                         &nbsp;
@@ -621,7 +638,7 @@ class CreateOrder extends Component {
               <Button
                   variant="warning"
                   style={{ marginBottom: 8 }}
-                  onClick={this.createOrder}
+                  onClick={this.updateOrder}
               >
                 Update
               </Button>

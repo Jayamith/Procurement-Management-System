@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faCut, faEraser } from '@fortawesome/free-solid-svg-icons';
 import Authentication from "../../authentication/Authentication";
 import AddOrderDataService from "../Order/AddOrderDataService";
+import {searchFilter} from "../../utils/searchFilter";
 
 
 class ViewAllSuppliers extends Component {
@@ -21,6 +22,7 @@ class ViewAllSuppliers extends Component {
         this.state = {
             userId: Authentication.loggedUserId(),
             suppliers: [],
+            filterName:''
         };
         this.getSuppliers = this.getSuppliers.bind(this);
 
@@ -35,6 +37,12 @@ class ViewAllSuppliers extends Component {
         this.setState({suppliers:response.data})
     }
 
+    handleChange = ({ target: input }) => {
+        this.setState({
+            [input.name]: input.value
+        });
+    };
+
     render() {
         const { suppliers } = this.state;
         const searchBox = {
@@ -45,6 +53,12 @@ class ViewAllSuppliers extends Component {
             borderTop: 'none',
             borderColor: '#000'
         };
+
+        const filtereredData = searchFilter(
+            suppliers,
+            this.state.filterName,
+            'name'
+        )
 
         return (
             <React.Fragment>
@@ -59,8 +73,9 @@ class ViewAllSuppliers extends Component {
                         style={searchBox}
                         autoComplete="off"
                         placeholder="Search for Suppliers..."
-                        name="search"
-                        value={this.state.search}
+                        onChange={this.handleChange}
+                        name="filterName"
+                        value={this.state.filterName}
                         className=""
                     />
                     &nbsp;
@@ -74,7 +89,7 @@ class ViewAllSuppliers extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {suppliers && suppliers
+                    {filtereredData && filtereredData
                         .map((supplier, index) => (
                             <tr key={index}>
                                 <td>{supplier.name}</td>

@@ -80,6 +80,7 @@ class FrontEnd extends Component {
             <Route path="/rejectedOrders" component={RejectedOrderList}/>
             <Route path="/procOrderList" component={ProcOrderList}/>
             <Route path="/seniorOrderList" component={SeniorOrderList}/>
+            <Route path="/payments" component={PaymentList}/>
           </Switch>
         </Container>
 

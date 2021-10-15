@@ -261,7 +261,7 @@ class OrderDetailedView extends Component {
                     required
                   >
                     <option value="">Choose...</option>
-                    <option value="approvedBySeniorStaff">Approve</option>
+                    <option value="approved">Approve</option>
                     <option value="rejected">Reject</option>
                   </Form.Control>
                   {/* <p style={{ margin: '5px 0px' }}>
@@ -326,7 +326,7 @@ class OrderDetailedView extends Component {
                     >
                       <option value="">Choose...</option>
                       {cost < 100000 && (
-                          <option value="approvedByProcurementStaff">Approve</option>
+                          <option value="approved">Approve</option>
                       )}
                       <option value="rejected">Reject</option>
                       <option value="seniorApprovalRequired">Senior Approval Required</option>
