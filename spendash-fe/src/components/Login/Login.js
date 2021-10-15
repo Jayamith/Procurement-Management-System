@@ -92,7 +92,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{marginTop: 40}}>
         <div className="login-title">LOGIN</div>
 
         <Container className="login-container">

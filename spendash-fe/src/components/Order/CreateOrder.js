@@ -25,6 +25,7 @@ import ItemCard from '../Items/ItemCard';
 import SelectedItems from '../Items/SelectedItems';
 import Authentication from "../../authentication/Authentication";
 import TextArea from "../../asset/commons/TextArea";
+import {searchFilter} from "../../utils/searchFilter";
 
 class CreateOrder extends Component {
   constructor(props) {
@@ -371,6 +372,13 @@ class CreateOrder extends Component {
     });
   };
 
+  handleChange2 = ({ target: input }) => {
+    this.setState({
+      [input.name]: input.value
+    });
+  };
+
+
   render() {
     const { errors, order, items, buttonError } = this.state; //properties
     const {
@@ -383,9 +391,15 @@ class CreateOrder extends Component {
       comment
     } = order;
 
+    const filtereredData = searchFilter(
+        items,
+        this.state.filterName,
+        'name'
+    )
+
     let newItems =
-      items &&
-      items.filter((item) => {
+        filtereredData &&
+        filtereredData.filter((item) => {
         return this.state.order.selectedSupplier === item.supplier.userName;
       });
 
@@ -398,6 +412,7 @@ class CreateOrder extends Component {
       borderColor: '#000',
       margin: '10px'
     };
+
 
     const { createOrder } = this; //methods
     return (
@@ -567,9 +582,10 @@ class CreateOrder extends Component {
                         <FormControl
                             style={searchBox}
                             autoComplete="off"
-                            placeholder="start typing..."
-                            name="search"
-                            value={this.state.search}
+                            onChange={this.handleChange2}
+                            placeholder="Search for Items..."
+                            name="filterName"
+                            value={this.state.filterName}
                             className=""
                         />
                         &nbsp;

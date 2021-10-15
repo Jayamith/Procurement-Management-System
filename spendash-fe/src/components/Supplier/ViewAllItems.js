@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faCut, faEraser } from '@fortawesome/free-solid-svg-icons';
 import AddReceiptDataService from "./AddReceiptDataService";
 import Authentication from "../../authentication/Authentication";
+import {searchFilter} from "../../utils/searchFilter";
 
 
 class ViewAllItems extends Component {
@@ -22,6 +23,7 @@ class ViewAllItems extends Component {
         this.state = {
             supplierId: Authentication.loggedUserId(),
             items: [],
+            filterName:''
         };
         this.getItems = this.getItems.bind(this);
 
@@ -36,6 +38,12 @@ class ViewAllItems extends Component {
         this.setState({items:response.data})
     }
 
+    handleChange = ({ target: input }) => {
+        this.setState({
+            [input.name]: input.value
+        });
+    };
+
     render() {
         const { items } = this.state;
         const searchBox = {
@@ -47,6 +55,11 @@ class ViewAllItems extends Component {
             borderColor: '#000'
         };
 
+        const filtereredData = searchFilter(
+            items,
+            this.state.filterName,
+            'name'
+        )
 
         return (
             <React.Fragment>
@@ -60,9 +73,10 @@ class ViewAllItems extends Component {
                     <FormControl
                         style={searchBox}
                         autoComplete="off"
+                        onChange={this.handleChange}
                         placeholder="Search for Items..."
-                        name="search"
-                        value={this.state.search}
+                        name="filterName"
+                        value={this.state.filterName}
                         className=""
                     />
                     &nbsp;
@@ -78,7 +92,7 @@ class ViewAllItems extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {items && items
+                    {filtereredData && filtereredData
                         .map((item, index) => (
                             <tr key={index}>
                                 <td>{item.id}</td>

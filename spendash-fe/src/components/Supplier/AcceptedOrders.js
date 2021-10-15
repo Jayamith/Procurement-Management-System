@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faCut, faEraser } from '@fortawesome/free-solid-svg-icons';
 import Authentication from "../../authentication/Authentication";
 import AddReceiptDataService from "./AddReceiptDataService";
+import {searchFilter} from "../../utils/searchFilter";
 
 class AcceptedOrderList extends Component {
     constructor(props) {
@@ -22,6 +23,7 @@ class AcceptedOrderList extends Component {
         this.state = {
             id:Authentication.loggedUserName(),
             approvedOrders: [],
+            filterName:''
         };
         this.getOrderBySupplier = this.getOrderBySupplier.bind(this);
     }
@@ -43,6 +45,13 @@ class AcceptedOrderList extends Component {
         this.setState({approvedOrders: response.data});
     }
 
+    handleChange = ({ target: input }) => {
+        this.setState({
+            [input.name]: input.value
+        });
+    };
+
+
     render() {
         const { approvedOrders} = this.state;
         const searchBox = {
@@ -62,6 +71,12 @@ class AcceptedOrderList extends Component {
                 <span style={{ backgroundColor: color, borderRadius: 4 }}>{text}</span>
             );
         };
+
+        const filtereredData = searchFilter(
+            approvedOrders,
+            this.state.filterName,
+            'status'
+        )
 
         return (
             <React.Fragment>
@@ -85,9 +100,10 @@ class AcceptedOrderList extends Component {
                         <FormControl
                             style={searchBox}
                             autoComplete="off"
+                            onChange={this.handleChange}
                             placeholder="Search for Orders..."
-                            name="search"
-                            value={this.state.search}
+                            name="filterName"
+                            value={this.state.filterName}
                             className=""
                         />
                         &nbsp;
@@ -104,7 +120,7 @@ class AcceptedOrderList extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        {approvedOrders.map((order) => (
+                        {filtereredData.map((order) => (
                             <tr>
                                 <td>{order.id}</td>
                                 <td>{order.site.name}</td>

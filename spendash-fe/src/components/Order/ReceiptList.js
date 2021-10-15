@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Authentication from "../../authentication/Authentication";
 import AddOrderDataService from "../Order/AddOrderDataService";
+import {searchFilter} from "../../utils/searchFilter";
 
 class ReceiptList extends Component {
     constructor(props) {
@@ -37,6 +38,12 @@ class ReceiptList extends Component {
         console.log(response.data)
     }
 
+    handleChange = ({ target: input }) => {
+        this.setState({
+            [input.name]: input.value
+        });
+    };
+
     render() {
         const { receipts } = this.state;
         const searchBox = {
@@ -56,6 +63,12 @@ class ReceiptList extends Component {
             );
         };
 
+        const filtereredData = searchFilter(
+            receipts,
+            this.state.filterName,
+            'paymentStatus'
+        )
+
         return (
             <React.Fragment>
                 <Container style={{ marginTop: 25, border: '2px solid black' , height: 500 }}>
@@ -68,9 +81,10 @@ class ReceiptList extends Component {
                     <FormControl
                         style={searchBox}
                         autoComplete="off"
+                        onChange={this.handleChange}
                         placeholder="Search for Receipts..."
-                        name="search"
-                        value={this.state.search}
+                        name="filterName"
+                        value={this.state.filterName}
                         className=""
                     />
                     &nbsp;
@@ -88,7 +102,7 @@ class ReceiptList extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {receipts && receipts
+                    {filtereredData && filtereredData
                         .map((receipt, index) => (
                             <tr key={index}>
                                 <td>{receipt.id}</td>

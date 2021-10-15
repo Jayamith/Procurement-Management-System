@@ -12,6 +12,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faCut, faEraser } from '@fortawesome/free-solid-svg-icons';
 import PaymentDataService from './PaymentDataService';
+import {searchFilter} from "../../utils/searchFilter";
 
 class PaymentList extends Component {
     constructor(props) {
@@ -42,6 +43,12 @@ class PaymentList extends Component {
         return this.props.history.push(`/payment`);
     };
 
+    handleChange = ({ target: input }) => {
+        this.setState({
+            [input.name]: input.value
+        });
+    };
+
     render() {
         const { payments, selectedSite } = this.state;
         const searchBox = {
@@ -59,6 +66,12 @@ class PaymentList extends Component {
                 <span style={{ backgroundColor: color, borderRadius: 4 }}>{text}</span>
             );
         };
+
+        const filtereredData = searchFilter(
+            payments,
+            this.state.filterName,
+            'method'
+        )
 
         return (
             <React.Fragment>
@@ -83,9 +96,10 @@ class PaymentList extends Component {
                     <FormControl
                         style={searchBox}
                         autoComplete="off"
-                        placeholder="start typing..."
-                        name="search"
-                        value={this.state.search}
+                        onChange={this.handleChange}
+                        placeholder="Search for Payments..."
+                        name="filterName"
+                        value={this.state.filterName}
                         className=""
                     />
                     &nbsp;
@@ -101,8 +115,8 @@ class PaymentList extends Component {
                     </tr>
                     </thead>
                      <tbody>
-                     {payments &&
-                     payments
+                     {filtereredData &&
+                     filtereredData
                 .map((payment, id) => (
                   <tr key={id}>
                     <td>{payment.id}</td>

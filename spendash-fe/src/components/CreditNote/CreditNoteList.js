@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Authentication from "../../authentication/Authentication";
 import CreditNoteDataService from "./CreditNoteDataService";
+import {searchFilter} from "../../utils/searchFilter";
 
 
 class CreditNoteList extends Component {
@@ -43,6 +44,12 @@ class CreditNoteList extends Component {
         return this.props.history.push(`/creditNote/${id}/${site}/${supplier}`);
     };
 
+    handleChange = ({ target: input }) => {
+        this.setState({
+            [input.name]: input.value
+        });
+    };
+
     render() {
         const { creditnotes } = this.state;
         const searchBox = {
@@ -61,6 +68,12 @@ class CreditNoteList extends Component {
             );
         };
 
+        const filtereredData = searchFilter(
+            creditnotes,
+            this.state.filterName,
+            'status'
+        )
+
         return (
             <React.Fragment>
                 <Container style={{ marginTop: 25, border: '2px solid black' }}>
@@ -73,9 +86,10 @@ class CreditNoteList extends Component {
                         <FormControl
                             style={searchBox}
                             autoComplete="off"
+                            onChange={this.handleChange}
                             placeholder="Search for Credit Notes..."
-                            name="search"
-                            value={this.state.search}
+                            name="filterName"
+                            value={this.state.filterName}
                             className=""
                         />
                         &nbsp;
@@ -98,7 +112,7 @@ class CreditNoteList extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        {creditnotes && creditnotes
+                        {filtereredData && filtereredData
                             .map((creditnote, index) => (
                                 <tr key={index}>
                                     <td>{creditnote.id}</td>

@@ -478,7 +478,7 @@ class CreateReceipt extends Component {
               </Col>
             </Row>
             <Row>
-              <Col md="auto">
+              <Col md={3}>
                 <div
                   style={{
                     marginBottom: '20px',
@@ -511,7 +511,7 @@ class CreateReceipt extends Component {
                   </Card>
                 </div>
               </Col >
-              <Col md={3}>
+              <Col md={4}>
                 <div style={{marginTop: 10}}>
                   <Card>
                     <Card.Header >
@@ -531,12 +531,11 @@ class CreateReceipt extends Component {
                   </Card>
                 </div>
               </Col>
-              <Col md={6}>
+              <Col md="auto">
                 <div
                   style={{
                     marginBottom: '20px',
                     textAlign: 'center',
-                    height: '300px',
                     padding:10,
                   }}
                 >
