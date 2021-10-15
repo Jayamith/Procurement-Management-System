@@ -10,7 +10,7 @@ class OrderDataService {
   }
 
   getOrderById(id) {
-    return axios.get(`http://localhost:8080//api/v1/order/${id}`);
+    return axios.get(`http://localhost:8080/api/v1/order/${id}`);
   }
 
   reviewOrder(obj) {

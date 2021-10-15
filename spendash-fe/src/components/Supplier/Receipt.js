@@ -478,7 +478,7 @@ class CreateReceipt extends Component {
               </Col>
             </Row>
             <Row>
-              <Col  md={3}>
+              <Col md="auto">
                 <div
                   style={{
                     marginBottom: '20px',

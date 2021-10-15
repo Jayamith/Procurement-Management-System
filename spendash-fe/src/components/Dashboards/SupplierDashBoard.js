@@ -38,12 +38,13 @@ class SupplierDashBoard extends Component {
                     border: '2px solid black',
                     paddingTop: 20,
                     paddingBottom: 80,
+                    paddingLeft: 60,
                     backgroundColor: '#D3D3D3'
                 }}>
                     <h2 style={{textAlign:"center", marginBottom: 40}}>Supplier DashBoard</h2>
                     <Row>
-                        <div style={{marginLeft: 30}}>
-                            <Col md={4}>
+                        {/*<div style={{marginLeft: 30}}>*/}
+                            <Col md="auto">
                                 <div className="card " style={{width: 300}}>
                                     <div className="card-header white">
                                         <h5 className="font-weight-bold mb-0" style={{textAlign: "center"}}>
@@ -59,9 +60,9 @@ class SupplierDashBoard extends Component {
                                     </div>
                                 </div>
                             </Col>
-                        </div>
-                        <Col md={4}>
-                            <div className="card " style={{width: 300, marginLeft:25}}>
+                        {/*</div>*/}
+                        <Col md="auto">
+                            <div className="card " style={{width: 300}}>
                                 <div className="card-header white">
                                     <h5 className="font-weight-bold mb-0" style={{textAlign: "center"}}>
                                         Received Orders
@@ -76,7 +77,7 @@ class SupplierDashBoard extends Component {
                                 </div>
                             </div>
                         </Col>
-                        <Col md={4}>
+                        <Col md="auto">
                             <div className="card " style={{width: 300}}>
                                 <div className="card-header white">
                                     <h5 className="font-weight-bold mb-0" style={{textAlign: "center"}}>
@@ -95,8 +96,9 @@ class SupplierDashBoard extends Component {
                     </Row>
                    <div style={{marginTop: 20}}>
                        <Row>
-                           <div style={{marginLeft: 230}}>
-                               <Col md={6}>
+                           <Col md={2}></Col>
+                           {/*<div style={{marginLeft: 230}}>*/}
+                               <Col md="auto">
                                    <div className="card " style={{width: 300}}>
                                        <div className="card-header white">
                                            <h5 className="font-weight-bold mb-0" style={{textAlign: "center"}}>
@@ -112,8 +114,8 @@ class SupplierDashBoard extends Component {
                                        </div>
                                    </div>
                                </Col>
-                           </div>
-                           <Col md={6}>
+                           {/*</div>*/}
+                           <Col md="auto">
                                <div className="card " style={{width: 300}}>
                                    <div className="card-header white">
                                        <h5 className="font-weight-bold mb-0" style={{textAlign: "center"}}>

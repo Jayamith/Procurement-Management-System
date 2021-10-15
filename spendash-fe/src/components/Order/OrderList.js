@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faCut, faEraser } from '@fortawesome/free-solid-svg-icons';
+import {faSearch, faCut, faEraser, faEye, faPenSquare} from '@fortawesome/free-solid-svg-icons';
 import OrderDataService from './OrderDataService';
 import Authentication from '../../authentication/Authentication';
 import SiteDataService from '../Header-Footer/SiteDataService';
@@ -71,8 +71,8 @@ class OrderList extends Component {
     return this.props.history.push(`/orderDetailedView/${id}`);
   };
 
-  onhandleClick2 = () => {
-    return this.props.history.push('/creditNote');
+  onUpClick = (id) => {
+    return this.props.history.push(`/createOrder/${id}`);
   };
 
   onhandleClick = (id) => {
@@ -163,8 +163,19 @@ class OrderList extends Component {
                             variant="secondary"
                             onClick={() => this.onhandleClick(order.id)}
                           >
-                            View Order
+                            <FontAwesomeIcon size="sm" icon={faEye} />
+                            &nbsp; View
                           </Button>
+                      {order.status !== 'approvedBySupplier' &&
+                        <Button
+                            style={{marginLeft: 20}}
+                            variant="warning"
+                            onClick={() => this.onUpClick(order.id)}
+                        >
+                          <FontAwesomeIcon size="sm" icon={faPenSquare} />
+                          &nbsp; Update
+                        </Button>
+                      }
                     </td>
                   </tr>
                 ))}

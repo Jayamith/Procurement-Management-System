@@ -63,6 +63,7 @@ class FrontEnd extends Component {
               component={SupplierOrderDetailedView}
             />
             <Route path="/creditNote/:id/:site/:supplier" component={CreateCreditNote} />
+            <Route path="/createOrder/:id" component={CreateOrder} />
             <Route path="/createOrder" component={CreateOrder} />
             <Route path="/receipt/:id" component={CreateReceipt} />
             <Route path="/receiptDetailedView/:id" component={ReceiptDetailedView}/>
